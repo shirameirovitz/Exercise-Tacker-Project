@@ -30,7 +30,14 @@ app.post("/api/exercise/new-user", async (req, res) => {
     }
   });
 });
-
+// test 3
+app.get("/api/exercise/users", (req, res) => {
+  User.find({}, (err, userArr) => {
+    if (!err) {
+      res.json(userArr);
+    }
+  });
+});
 
 
 
