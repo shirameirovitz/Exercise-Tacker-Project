@@ -1,36 +1,27 @@
+  
 require("dotenv").config();
 const mongoose = require("mongoose");
-
-const url = process.env.MONGODB_URI;
-
-mongoose.connect(url, {useNewUrlParser: true,useUnifiedTopology: true,useFindAndModify: false,useCreateIndex: true,})
-  .then((result) => {
-    console.log("connected to MongoDB");
-  })
-  .catch((error) => {
-    console.log("error connecting to MongoDB:", error.message);
-  });
-
-const UserScheme = new mongoose.Schema({
-  username: {
-    type: String,
-    require: true,
-    unique: true,
+mongoose.connect(
+  process.env.MONGO_URI,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   },
-  log: [ExerciseScheme],
+  () => {
+    console.log("connected to mongo DB");
+  }
+);
+
+const ExerciseSchema = new mongoose.Schema({
+  date: String,
+  duration: { type: Number, required: true },
+  description: { type: String, required: true },
 });
-const ExerciseScheme = new mongoose.SchemaType({
-    date: String,
-    duration: { type: Number,
-    require: true
-},
-    description: { type: String,
-    require:true
-},
-})
-
-
-let User = new mongoose.model("User", UserScheme);
-let Exercise = new mongoose.model("Exercise", ExerciseScheme);
+const UserSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  log: [ExerciseSchema],
+});
+const Exercise = new mongoose.model(`Exercise`, ExerciseSchema);
+const User = new mongoose.model(`User`, UserSchema);
 
 module.exports = { User, Exercise };

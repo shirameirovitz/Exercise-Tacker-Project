@@ -14,7 +14,6 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
 });
-
 // test 2
 app.post("/api/exercise/new-user", async (req, res) => {
   const userName = req.body.username;
@@ -38,7 +37,6 @@ app.get("/api/exercise/users", (req, res) => {
     }
   });
 });
-
 // test 4
 app.post("/api/exercise/add", (req, res) => {
   let newExerciseItem = new Exercise({
@@ -109,8 +107,6 @@ app.get("/api/exercise/log", (request, response) => {
     }
   });
 });
-
-
 const listener = app.listen(process.env.PORT || 3000, () => {
-  console.log('Your app is listening on port ' + listener.address().port)
-})
+  console.log("Your app is listening on port " + listener.address().port);
+});
