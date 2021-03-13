@@ -47,6 +47,69 @@ app.post("/api/exercise/add", (req, res) => {
     date: req.body.date,
   });
 
+  if (newExerciseItem.date === "") {
+    newExerciseItem.date = new Date()
+      .toISOString()
+      .substring(0, 10)
+      .toDateString();
+  }
+
+  User.findByIdAndUpdate(
+    req.body.userId,
+    { $push: { log: newExerciseItem } },
+    { new: true },
+    (error, updatedUser) => {
+      if (!error) {
+        let responseObject = {};
+        responseObject["_id"] = updatedUser.id;
+        responseObject["username"] = updatedUser.username;
+        responseObject["description"] = newExerciseItem.description;
+        responseObject["duration"] = newExerciseItem.duration;
+        responseObject["date"] = new Date(newExerciseItem.date).toDateString();
+        res.json(responseObject);
+      }
+    }
+  );
+});
+// tests 5 + 6 + 7
+app.get("/api/exercise/log", (request, response) => {
+  User.findById(request.query.userId, (error, result) => {
+    if (!error) {
+      let responseObject = result;
+
+      if (request.query.from || request.query.to) {
+        let fromDate = new Date(0);
+        let toDate = new Date();
+
+        if (request.query.from) {
+          fromDate = new Date(request.query.from);
+        }
+
+        if (request.query.to) {
+          toDate = new Date(request.query.to);
+        }
+
+        fromDate = fromDate.getTime();
+        toDate = toDate.getTime();
+
+        responseObject.log = responseObject.log.filter((session) => {
+          let sessionDate = new Date(session.date).getTime();
+
+          return sessionDate >= fromDate && sessionDate <= toDate;
+        });
+      }
+
+      if (request.query.limit) {
+        responseObject.log = responseObject.log.slice(0, request.query.limit);
+      }
+
+      responseObject = responseObject.toJSON();
+      responseObject["count"] = result.log.length;
+      response.json(responseObject);
+    }
+  });
+});
+
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
