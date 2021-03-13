@@ -39,7 +39,13 @@ app.get("/api/exercise/users", (req, res) => {
   });
 });
 
-
+// test 4
+app.post("/api/exercise/add", (req, res) => {
+  let newExerciseItem = new Exercise({
+    description: req.body.description,
+    duration: parseInt(req.body.duration),
+    date: req.body.date,
+  });
 
 
 const listener = app.listen(process.env.PORT || 3000, () => {
