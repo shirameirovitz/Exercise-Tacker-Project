@@ -17,6 +17,7 @@ const ExerciseSchema = new mongoose.Schema({
   duration: { type: Number, required: true },
   description: { type: String, required: true },
 });
+
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true },
   log: [ExerciseSchema],
