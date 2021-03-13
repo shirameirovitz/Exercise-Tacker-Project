@@ -30,7 +30,7 @@ const ExerciseScheme = new mongoose.SchemaType({
 })
 
 
-let User = mongoose.model("User", UserScheme);
+let User = new mongoose.model("User", UserScheme);
 let Exercise = new mongoose.model("Exercise", ExerciseScheme);
 
 module.exports = { User, Exercise };
